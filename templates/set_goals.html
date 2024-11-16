@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Goals</title>
+<style>
+  body {
+    background-color: #eae9d8;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .set-goals-page {
+    background-color: #f4f1ea;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .header {
+    display: flex;
+    align-items: left;
+    margin-bottom: 50px;
+  }
+
+  .logo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .app-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-left: 10px;
+    color: #333;
+  }
+
+  .goals-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+  }
+
+  .section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .input-label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .input-field input,
+  .input-field .date-format {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f0e3e3;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .input-field {
+    margin-bottom: 20px;
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #1B5E20;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .submit-button:hover {
+    background-color: #1B5E20;
+  }
+
+  .active-goals-container {
+    margin-top: 40px;
+  }
+
+  .active-goals-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .goal-item {
+    background-color: #f0e3e3;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .goal-deadline {
+    color: #007bff;
+    font-weight: 700;
+  }
+
+  
+  .button {
+        background-color: #1B5E20; /* Green background */
+        color: white; /* White text */
+        padding: 10px 20px; /* Padding */
+        text-align: center; /* Center text */
+        text-decoration: none; /* No underline */
+        display: inline-block; /* Display as inline-block */
+        font-size: 16px; /* Font size */
+        margin: 4px 2px; /* Margin */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        width: 100px;
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s; /* Smooth background color transition */
+    }
+
+    .button:hover {
+        background-color: #45a049; /* Darker green on hover */
+    }
+ /* High-contrast mode */
+ .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+        }
+
+    /* Button styles */
+    button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+</style>
+</head>
+<body>
+<div class="accessibility-controls">
+  <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+  <button onclick="toggleContrast()">High Contrast</button>
+  <div id="google_translate_element"></div>
+</div>
+
+<!-- External scripts -->
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+<script>
+  // Function to initialize Google Translate
+  function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+  }
+
+  // Text-to-speech functionality
+  let speechEnabled = false;
+
+  function toggleTextToSpeech() {
+      speechEnabled = !speechEnabled;
+      if (speechEnabled) {
+          alert('Text-to-Speech enabled. Click text to hear it.');
+      } else {
+          alert('Text-to-Speech disabled.');
+          window.speechSynthesis.cancel();
+      }
+  }
+
+  function readText(element) {
+      if (speechEnabled) {
+          const utterance = new SpeechSynthesisUtterance(element.innerText);
+          window.speechSynthesis.speak(utterance);
+      }
+  }
+
+  // High-contrast mode toggle
+  function toggleContrast() {
+      document.body.classList.toggle('high-contrast');
+  }
+
+  // Add event listeners for text-to-speech on all pages
+  document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.text-to-speak').forEach(element => {
+          element.addEventListener('click', () => readText(element));
+      });
+  });
+</script>
+<header class="header">
+  <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" class="logo" alt="HabitQuest Logo" />
+  <h1 class="app-title">HabitQuest</h1>
+
+</header>
+      <a href="{{ url_for('index') }}" class="button">Back to home</a>
+<section class="set-goals-page">
+
+  <main class="goals-container">
+    <h2 class="section-title">Set Your Goals</h2>
+
+    <form action="/add_goal" method="POST">
+      <label for="goal_title" class="input-label">Goal Title</label>
+      <div class="input-field">
+          <input type="text" id="goal_title" name="goal_title" placeholder="Enter your goal" required />
+      </div>
+  
+      <label for="goal_deadline" class="input-label">Deadline</label>
+      <div class="input-field">
+          <input type="date" id="goal_deadline" name="goal_deadline" class="date-format" required />
+      </div>
+  
+      <button type="submit" class="submit-button">Add Goal</button>
+  </form>
+  
+    <div class="active-goals-container">
+      <h3 class="active-goals-title">Active Goals</h3>
+      <ul class="active-goals-list">
+          {% for goal in active_goals %}
+          <li class="goal-item">
+              {{ goal['goal_description'] }} by <span class="goal-deadline">{{ goal['target_date'] }}</span>
+          </li>
+          {% endfor %}
+      </ul>
+  </div>
+  
+  </main>
+  
+</section>
+</body>
+</html>

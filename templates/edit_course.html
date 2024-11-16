@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course - HabitQuest</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="number"], input[type="url"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #1B5E20;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #1B5E20;
+        }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('parental_monitoring') }}" class="button">Back</a>
+    <div class="container">
+        <h2>Edit Course</h2>
+        <form method="POST" action="{{ url_for('update_course', course_id=course.course_id) }}">
+            <!-- Title -->
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" value="{{ course.title }}" required placeholder="Enter the course title">
+
+            <!-- Description -->
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" placeholder="Enter course description">{{ course.description }}</textarea>
+
+            <!-- Course Content -->
+            <label for="content_learning">Course Content:</label>
+            <textarea name="content_learning" id="content_learning" required placeholder="Enter course content">{{ course.content_learning }}</textarea>
+
+            <!-- Content Type -->
+            <label for="content_type">Content Type:</label>
+            <select name="content_type" id="content_type" required>
+                <option value="Video" {% if course.content_type == 'Video' %}selected{% endif %}>Video</option>
+                <option value="PDF" {% if course.content_type == 'PDF' %}selected{% endif %}>PDF/DOC</option>
+            </select>
+
+            <!-- Content URL -->
+            <label for="content_url">Content URL:</label>
+            <input type="url" name="content_url" id="content_url" value="{{ course.content_url }}" placeholder="Enter content URL">
+
+            <!-- Frequency -->
+            <label for="frequency">Frequency:</label>
+            <select name="frequency" id="frequency">
+                <option value="Daily" {% if course.frequency == 'Daily' %}selected{% endif %}>Daily</option>
+                <option value="Weekly" {% if course.frequency == 'Weekly' %}selected{% endif %}>Weekly</option>
+            </select>
+
+            <!-- Start Date -->
+            <label for="start_date">Start Date:</label>
+            <input type="date" name="start_date" id="start_date" value="{{ course.start_date }}" required>
+
+            <!-- End Date -->
+            <label for="end_date">End Date:</label>
+            <input type="date" name="end_date" id="end_date" value="{{ course.end_date }}">
+
+            <!-- Status -->
+            <label for="status">Status:</label>
+            <select name="status" id="status" required>
+                <option value="Active" {% if course.status == 'Active' %}selected{% endif %}>Active</option>
+                <option value="Inactive" {% if course.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+            </select>
+
+            <button type="submit" class="button">Update Course</button>
+        </form>
+    </div>
+</body>
+</html>

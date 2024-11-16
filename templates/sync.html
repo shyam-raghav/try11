@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Added lang attribute for better accessibility -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync with Calendar - HabitQuest</title> <!-- Added meaningful title -->
+    <style>
+        .sync-calendar-wrapper {
+            background-color: #eae9d8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: Inter, sans-serif;
+            font-weight: 400;
+            padding: 50px 69px 646px;
+        }
+        
+        @media (max-width: 991px) {
+            .sync-calendar-wrapper {
+                padding: 0 20px 100px;
+            }
+        }
+        
+        .brand-header {
+            align-self: flex-start;
+            display: flex;
+            gap: 8px;
+            font-size: 18px;
+            color: #000;
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 991px) {
+            .brand-header {
+                white-space: normal;
+            }
+        }
+        
+        .brand-logo {
+            aspect-ratio: 1.05;
+            object-fit: contain;
+            object-position: center;
+            width: 60px;
+        }
+        
+        .brand-name {
+            margin: auto 0;
+        }
+        
+        .sync-calendar-container {
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+            align-self: center;
+            display: flex;
+            margin-top: 35px;
+            width: 100%;
+            max-width: 1230px;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 60px 40px 40px;
+        }
+        
+        @media (max-width: 991px) {
+            .sync-calendar-container {
+                max-width: 100%;
+                padding: 0 20px;
+            }
+        }
+        
+        .sync-calendar-title {
+            width: 100%;
+            padding-bottom: 1px;
+            color: #000;
+            font: 700 24px Poppins, sans-serif;
+            contrast: #000; /* Increased contrast for visibility */
+        }
+        
+        @media (max-width: 991px) {
+            .sync-calendar-title {
+                max-width: 100%;
+            }
+        }
+        
+        .sync-calendar-description {
+            margin-top: 20px;
+            width: 100%;
+            padding-bottom: 1px;
+            font-size: 12px;
+            color: #555;
+        }
+        
+        @media (max-width: 991px) {
+            .sync-calendar-description {
+                max-width: 100%;
+            }
+        }
+        
+        .calendar-buttons-container {
+            display: flex;
+            margin-top: 20px;
+            width: 100%;
+            align-items: flex-start;
+            gap: 40px 264px;
+            font-size: 15px;
+            color: #f0e3e3;
+            text-align: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            padding: 0 97px 0 132px;
+        }
+        
+        @media (max-width: 991px) {
+            .calendar-buttons-container {
+                max-width: 100%;
+                padding: 0 20px;
+            }
+        }
+        
+        .calendar-button {
+            border-radius: 8px;
+            background-color:#1B5E20;
+            padding: 12px 20px 13px;
+            border: none;
+            cursor: pointer;
+            color: #f0e3e3;
+            font-size: 15px;
+            contrast: #fff; /* Increased contrast */
+        }
+
+        .calendar-button-ical {
+            font-size: 16px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 991px) {
+            .calendar-button-ical {
+                white-space: normal;
+            }
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .button {
+            background-color: #1B5E20;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            border: none;
+            border-radius: 5px;
+            width: 100px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #1B5E20;
+        }
+
+        /* High-contrast mode */
+        .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+            contrast: 100%;
+        }
+
+        /* Button styles */
+        button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+        
+        button:hover, button:focus {
+            background-color: #1B5E20;
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Accessibility controls -->
+<div class="accessibility-controls">
+    <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+    <button onclick="toggleContrast()">High Contrast</button>
+    <div id="google_translate_element"></div>
+</div>
+
+<!-- External scripts -->
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+<script>
+    // Function to initialize Google Translate
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+    }
+
+    // Text-to-speech functionality
+    let speechEnabled = false;
+
+    function toggleTextToSpeech() {
+        speechEnabled = !speechEnabled;
+        if (speechEnabled) {
+            alert('Text-to-Speech enabled. Click text to hear it.');
+        } else {
+            alert('Text-to-Speech disabled.');
+            window.speechSynthesis.cancel();
+        }
+    }
+
+    function readText(element) {
+        if (speechEnabled) {
+            const utterance = new SpeechSynthesisUtterance(element.innerText);
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // High-contrast mode toggle
+    function toggleContrast() {
+        document.body.classList.toggle('high-contrast');
+    }
+
+    // Add event listeners for text-to-speech on all pages
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.text-to-speak').forEach(element => {
+            element.addEventListener('click', () => readText(element));
+        });
+    });
+</script>
+
+<section class="sync-calendar-wrapper">
+    <header class="brand-header">
+        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" class="brand-logo" alt="HabitQuest logo" />
+        <h1 class="brand-name">HabitQuest</h1>
+    </header><br>
+    <a href="{{ url_for('index') }}" class="button">Back to home</a>
+    <main class="sync-calendar-container">
+        <h2 class="sync-calendar-title">Sync with Calendar</h2>
+        <p class="sync-calendar-description">Connect your tasks and goals with your calendar:</p>
+        
+        <div class="calendar-buttons-container">
+            <a href="{{ url_for('calendar') }}">
+                <button class="calendar-button" id="google-calendar" aria-label="Connect with Google Calendar">Google Calendar</button>
+            </a>
+        </div>
+    </main>
+</section>
+
+</body>
+</html>

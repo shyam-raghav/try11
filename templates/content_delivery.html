@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Content Delivery - HabitQuest</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #eae9d8;
+    }
+
+    header {
+      background-color: #1B5E20;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header-title {
+      font-size: 2.5em;
+    }
+
+    nav {
+      background-color: #1B5E20;
+      padding: 15px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 15px;
+    }
+
+    .card-title {
+      font-size: 1.5em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .card-description {
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: #1B5E20;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .card-link:hover {
+      color: #1B5E20;
+    }
+
+    footer {
+      text-align: center;
+      background-color: #1B5E20;
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    .button {
+        background-color: #1B5E20; /* Green background */
+        color: white; /* White text */
+        padding: 10px 20px; /* Padding */
+        text-align: center; /* Center text */
+        text-decoration: none; /* No underline */
+        display: inline-block; /* Display as inline-block */
+        font-size: 16px; /* Font size */
+        margin: 4px 2px; /* Margin */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        width: 100px;
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s; /* Smooth background color transition */
+    }
+
+    .button:hover {
+        background-color: #1B5E20; /* Darker green on hover */
+    }
+
+     /* High-contrast mode */
+     .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+        }
+
+    /* Button styles */
+    button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 class="header-title">HabitQuest Learning Hub</h1>
+</header>
+
+
+<div class="container">
+  <a href="{{ url_for('index') }}" class="button">Back to home</a>
+  <!-- Accessibility buttons -->
+  <div class="accessibility-controls">
+    <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+    <button onclick="toggleContrast()">High Contrast</button>
+    <div id="google_translate_element"></div>
+</div>
+
+<!-- External scripts -->
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+<script>
+    // Function to initialize Google Translate
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+    }
+
+    // Text-to-speech functionality
+    let speechEnabled = false;
+
+    function toggleTextToSpeech() {
+        speechEnabled = !speechEnabled;
+        if (speechEnabled) {
+            alert('Text-to-Speech enabled. Click text to hear it.');
+        } else {
+            alert('Text-to-Speech disabled.');
+            window.speechSynthesis.cancel();
+        }
+    }
+
+    function readText(element) {
+        if (speechEnabled) {
+            const utterance = new SpeechSynthesisUtterance(element.innerText);
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // High-contrast mode toggle
+    function toggleContrast() {
+        document.body.classList.toggle('high-contrast');
+    }
+
+    // Add event listeners for text-to-speech on all pages
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.text-to-speak').forEach(element => {
+            element.addEventListener('click', () => readText(element));
+        });
+    });
+</script>
+  <h2>Explore Our Learning Resources for {{ course_name }}</h2>
+<div class="text-to-speak">
+  <div class="content-grid" >
+
+      <!-- Assessments Section -->
+      <div class="card" id="assessments">
+          <img src="/static/assessment related image with size 400_200 for card image.png" alt="Assessments">
+          <div class="card-content">
+              <h3 class="card-title">Assessments</h3>
+              <p class="card-description">Test your knowledge and track your progress with our assessments designed to reinforce learning.</p>
+              <!-- Pass user_id and course_id to the assessment route -->
+              <a href="{{ url_for('assessment', user_id=user_id, content_id=content_id) }}" class="card-link">Take an Assessment</a>
+          </div>
+      </div>
+
+      <!-- Interactive Learning Materials Section -->
+      <div class="card" id="interactive-materials">
+          <img src="/static/learning materials icon.png" alt="Interactive Materials">
+          <div class="card-content">
+              <h3 class="card-title">Learning Materials</h3>
+              <p class="card-description">Engage with interactive learning materials that provide hands-on experience and real-time feedback.</p>
+              <!-- Pass user_id and course_id to the content delivery route -->
+              <a href="{{ url_for('course_content', user_id=user_id, content_id=content_id) }}" class="card-link">Start Learning</a>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+<footer>
+  <p>&copy; 2024 HabitQuest. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

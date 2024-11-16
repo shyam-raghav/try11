@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ user.name }}'s Assessment</title>
+    <style>
+        /* General page styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Centered container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Question styling */
+        .question-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .question-container p {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+            color: #444;
+        }
+
+        .option {
+            display: block;
+            margin: 8px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Radio input styling */
+        input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #1B5E20;
+        }
+
+        /* Submit button styling */
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #1B5E20;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #1B5E20;
+        }
+
+        /* Flash message styling */
+        .flash-messages {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e7f3e9;
+            border-left: 6px solid #1B5E20;
+            color: #2e7d32;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .question-container p, .option {
+                font-size: 16px;
+            }
+            button[type="submit"] {
+                font-size: 16px;
+            }
+        }
+
+
+         /* High-contrast mode */
+     .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+        }
+
+    /* Button styles */
+    button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+
+    </style>
+
+    <script>
+        let startTime;
+        let timerInterval;
+
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('time_spent').value = elapsedTime; // Store time spent in hidden input
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        window.onload = startTimer;
+        window.onunload = stopTimer; // Stop timer when the page is closed
+    </script>
+    
+    
+</head>
+<body>
+    <h1>Assessment for {{ user.name }}</h1>
+
+    <!-- Accessibility buttons -->
+    <div class="accessibility-controls">
+        <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+        <button onclick="toggleContrast()">High Contrast</button>
+        <div id="google_translate_element"></div>
+    </div>
+
+    <!-- External scripts -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    
+    <script>
+        // Function to initialize Google Translate
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+
+        // Text-to-speech functionality
+        let speechEnabled = false;
+
+        function toggleTextToSpeech() {
+            speechEnabled = !speechEnabled;
+            if (speechEnabled) {
+                alert('Text-to-Speech enabled. Click text to hear it.');
+            } else {
+                alert('Text-to-Speech disabled.');
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function readText(element) {
+            if (speechEnabled) {
+                const utterance = new SpeechSynthesisUtterance(element.innerText);
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // High-contrast mode toggle
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        // Add event listeners for text-to-speech on all pages
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.text-to-speak').forEach(element => {
+                element.addEventListener('click', () => readText(element));
+            });
+        });
+    </script>
+
+    <div class="container">
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+    
+        <form method="POST" action="{{ url_for('submit_assessment', content_id=content_id) }}" class="text-to-speak">
+            {% for question in assessment_questions %}
+                <fieldset class="question-container">
+                    <!-- Group description in a legend -->
+                    <legend>{{ question.question }}</legend>
+                    <label class="option">
+                        <input type="radio" name="question_{{ question.assessment_id }}" value="1">
+                        {{ question.option1 }}
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="question_{{ question.assessment_id }}" value="2">
+                        {{ question.option2 }}
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="question_{{ question.assessment_id }}" value="3">
+                        {{ question.option3 }}
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="question_{{ question.assessment_id }}" value="4">
+                        {{ question.option4 }}
+                    </label>
+                </fieldset>
+            {% endfor %}
+            <button type="submit">Submit Assessment</button>
+        </form>
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+    <title>HabitQuest Dashboard</title>
+    <style>
+        /* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #eae9d8; /* Light pink background */
+    color: #333;
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: #1B5E20; /* Green background */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logout {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Dashboard container */
+.dashboard-container {
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.course-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.courses-enrolled, .courses-completed {
+            width: 45%;
+            padding: 20px;
+            background-color: #f7f7f7;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+.courses-enrolled a, .courses-completed a {
+    color: #0056b3; /* Blue link color */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Habit tracker table */
+.habit-tracker h2 {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f0f0f0;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f7f7f7;
+}
+
+.logo-container {
+    align-self: left; /* Center the logo horizontally */
+    display: flex;
+    gap: 8px;
+  }
+  
+  .logo-image {
+    aspect-ratio: 1.05;
+    object-fit: contain;
+    width: 60px; /* Reduced width */
+
+  }
+
+  h2{
+    padding: 12px;
+    color: white;
+  }
+  .no-underline {
+  text-decoration: none;
+}
+
+.dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropbtn {
+        background-color: #1B5E20; /* Green */
+        color: white;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #1B5E20;
+    }
+
+         /* Search bar */
+         .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 300px; /* Width of the search bar */
+            border: 1px solid #ccc; /* Border style */
+            border-radius: 5px; /* Rounded corners */
+        }
+
+         /* Remove underline and set color for the habit link */
+    .habit-link {
+        color: inherit;       /* Inherit color from parent (default table text color) */
+        text-decoration: none; /* Remove underline */
+        cursor: pointer;       /* Show pointer cursor to indicate it’s clickable */
+    }
+
+    /* Optional: Add hover effect */
+    .habit-link:hover {
+        color: #333;           /* Change color on hover, if desired */
+    }
+
+     /* High-contrast mode */
+     .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+        }
+
+    /* Button styles */
+    button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+
+    </style>
+    <script>
+        function searchCourses() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const rows = document.querySelectorAll('table tbody tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const titleCell = rows[i].getElementsByTagName("td")[0];
+            if (titleCell) {
+                const txtValue = titleCell.textContent || titleCell.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+        
+    </script>
+</head>
+<body>
+    {% if alerts %}
+    <ul class="alert-messages">
+        <h1>{{alerts}}</h1>
+        {% for alert in alerts %}
+            <script>
+                alert({alert});
+            </script>
+        {% endfor %}
+    </ul>
+{% endif %}
+    <!-- Accessibility buttons -->
+    <div class="accessibility-controls">
+        <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+        <button onclick="toggleContrast()">High Contrast</button>
+        <div id="google_translate_element"></div>
+    </div>
+
+    <div id="notification"></div>
+
+    <script>
+        // Connect to the Flask-SocketIO server
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Listen for 'goal_alert' event from the server
+        socket.on('goal_alert', function(data) {
+            // Display the alert on the webpage
+            var notificationDiv = document.getElementById('notification');
+            var alertMessage = document.createElement('div');
+            alertMessage.innerText = data.message;
+            alertMessage.style.backgroundColor = '#ffdddd';
+            alertMessage.style.padding = '10px';
+            alertMessage.style.margin = '10px 0';
+            alertMessage.style.border = '1px solid #f5c6cb';
+            notificationDiv.appendChild(alertMessage);
+        });
+    </script>
+
+    <div class="navbar">
+        <header class="logo-container">
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" alt="HabitQuest Logo" class="logo-image">
+            <a href="{{url_for('index')}}" class="no-underline"><h2>HabitQuest</h2></a>
+
+          </header>
+        <div class="nav-links">
+            <a href="{{url_for('notification')}}">Push Reminders</a>
+            <a href="{{url_for('progress')}}">Track Progress</a>
+            <a href="{{url_for('courses')}}">Register Habit/Course</a>
+            <a href="{{url_for('user_analysis')}}">User Analytics</a>
+            
+            <a href="{{url_for('sync')}}">Calendar Sync</a>
+           
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn"> <h5 style="align-content: left; color: white;">Email: {{user['email']}}</h5></button>
+            <div class="dropdown-content">
+                <a href="{{ url_for('setgoals') }}">Set Goals</a>
+                <a href="{{ url_for('profile_update') }}">Profile Customization</a>
+                <a href="{{url_for('rewards', user_id=user_id)}}">Rewards</a>
+                <a href="{{ url_for('logout') }}" class="logout">Log Out</a>
+            </div>
+        </div>
+    </div>
+<div class="text-to-speak">
+    <div class="dashboard-container">
+        <h1>Welcome to Dashboard, {{ user['name'] }}!</h1>
+        
+        
+    
+        <div class="course-info">
+            <div class="courses-enrolled">
+                <p>Total Courses</p>
+                <a href="#">{{enrolled_count }} Enrolled</a>
+            </div>
+            <div class="courses-completed">
+                <p>Completed</p>
+                <a href="#">{{ completed_count }} Courses</a>
+            </div>
+        </div>
+    
+        <div class="habit-tracker">
+            <h2>Daily Habit Tracker</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" onkeyup="searchCourses()" placeholder="Search for courses..." aria-label="Search for courses">
+
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Habit</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for habit in enrolled_courses %}
+                <tr>
+                    <td><a href="{{ url_for('course_content', content_id=habit['content_id']) }}" class="habit-link">
+                        {{ habit['task_name'] }}
+                    </a></td>
+                    <td>{{ habit['status'] }}</td>  
+                </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
+    <!-- External scripts -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    
+    <script>
+        // Function to initialize Google Translate
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+
+        // Text-to-speech functionality
+        let speechEnabled = false;
+
+        function toggleTextToSpeech() {
+            speechEnabled = !speechEnabled;
+            if (speechEnabled) {
+                alert('Text-to-Speech enabled. Click text to hear it.');
+            } else {
+                alert('Text-to-Speech disabled.');
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function readText(element) {
+            if (speechEnabled) {
+                const utterance = new SpeechSynthesisUtterance(element.innerText);
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // High-contrast mode toggle
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        // Add event listeners for text-to-speech on all pages
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.text-to-speak').forEach(element => {
+                element.addEventListener('click', () => readText(element));
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">  <!-- Added lang attribute for accessibility -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Progress | HabitQuest</title>  <!-- Added title for better navigation and accessibility -->
+    <style>
+        .progress-page {
+            background-color: #eae9d8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 67px 62px 368px;
+        }
+
+        .logo-container {
+            align-self: flex-start;
+            display: flex;
+            gap: 8px;
+            color: #000;
+            font: 400 18px Inter, sans-serif;
+        }
+
+        .logo {
+            aspect-ratio: 1.05;
+            object-fit: contain;
+            object-position: center;
+            width: 60px;
+        }
+
+        .progress-card {
+            border-radius: 12px;
+            background-color: #f0e3e3;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            align-self: center;
+            display: flex;
+            margin-top: 29px;
+            width: 100%;
+            max-width: 1264px;
+            flex-direction: column;
+            padding: 50px 30px;
+        }
+
+        .progress-title {
+            color: #000;
+            text-align: center;
+            font: 700 24px Poppins, sans-serif;
+        }
+
+        .progress-item {
+            display: flex;
+            margin-top: 20px;
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .progress-bar {
+            border-radius: 8px;
+            background-color: #e0e0e0;
+            display: flex;
+            width: 100%;
+        }
+
+        .progress-fill {
+            border-radius: 8px;
+            background-color: #1B5E20;
+            height: 20px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-text {
+            margin-top: 10px;
+            color: #555;
+            text-align: center;
+            font: 400 12px Inter, sans-serif;
+        }
+
+        /* High-contrast mode */
+        .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+            color: white;  /* Ensure text is visible in high-contrast mode */
+        }
+
+        /* Button styles */
+        .button {
+            background-color: #1B5E20; /* Green background */
+            color: white; /* White text */
+            padding: 10px 20px; /* Padding */
+            text-align: center; /* Center text */
+            text-decoration: none; /* No underline */
+            display: inline-block; /* Display as inline-block */
+            font-size: 16px; /* Font size */
+            margin: 4px 2px; /* Margin */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            width: 100px;
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+
+        .button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+
+        button:hover, button:focus {
+            background-color: #1B5E20;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Accessibility buttons -->
+    <div class="accessibility-controls">
+        <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+        <button onclick="toggleContrast()">High Contrast</button>
+        <div id="google_translate_element"></div>
+    </div>
+
+    <!-- External scripts -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+    <script>
+        // Function to initialize Google Translate
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+
+        // Text-to-speech functionality
+        let speechEnabled = false;
+
+        function toggleTextToSpeech() {
+            speechEnabled = !speechEnabled;
+            if (speechEnabled) {
+                alert('Text-to-Speech enabled. Click text to hear it.');
+            } else {
+                alert('Text-to-Speech disabled.');
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function readText(element) {
+            if (speechEnabled) {
+                const utterance = new SpeechSynthesisUtterance(element.innerText);
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // High-contrast mode toggle
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        // Add event listeners for text-to-speech on all pages
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.text-to-speak').forEach(element => {
+                element.addEventListener('click', () => readText(element));
+            });
+        });
+    </script>
+
+    <section class="progress-page">
+        <header class="logo-container">
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" alt="HabitQuest Logo" class="logo">
+            <h1>HabitQuest</h1>
+        </header>
+        <br>
+        <a href="{{ url_for('index') }}" class="button">Back to home</a>
+        <main class="progress-card">
+            <h2 class="progress-title">Your Progress</h2>
+
+            {% for course in progress_data %}
+            <p>Completion percentage is {{ course.last_assessment_score }}</p>  <!-- Debug output -->
+            <article class="progress-item">
+                <div class="progress-bar" role="progressbar" aria-label="{{ course.habit_name }} Progress" aria-valuenow="{{ course.last_assessment_score }}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-fill" style="width: {{ course.last_assessment_score }}%;"></div>
+                </div>
+                <p class="progress-text">{{ course.last_assessment_score }}% completed on "{{ course.habit_name }}"</p>
+            </article>
+            {% endfor %}
+        </main>
+    </section>
+</body>
+</html>

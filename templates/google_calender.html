@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Integration</title>
+    <style>
+        .button {
+            background-color: #1B5E20; /* Green background */
+            color: white; /* White text */
+            padding: 10px 20px; /* Padding */
+            text-align: center; /* Center text */
+            text-decoration: none; /* No underline */
+            display: inline-block; /* Display as inline-block */
+            font-size: 16px; /* Font size */
+            margin: 4px 2px; /* Margin */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            width: 100px; /* Fixed width */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+
+        .button:hover {
+            background-color: #1B5E20; /* Darker green on hover */
+        }
+
+        .calendar-iframe {
+            width: 800px;
+            height: 600px;
+            border: 0; /* No border */
+            margin-top: 20px; /* Space above the iframe */
+        }
+
+         /* High-contrast mode */
+     .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+        }
+
+    /* Button styles */
+    button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility buttons -->
+    <div class="accessibility-controls">
+        <button onclick="toggleContrast()">High Contrast</button>
+        <div id="google_translate_element"></div>
+    </div>
+
+    <!-- External scripts -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    
+    <script>
+        // Function to initialize Google Translate
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+
+        // Text-to-speech functionality
+        let speechEnabled = false;
+
+        function toggleTextToSpeech() {
+            speechEnabled = !speechEnabled;
+            if (speechEnabled) {
+                alert('Text-to-Speech enabled. Click text to hear it.');
+            } else {
+                alert('Text-to-Speech disabled.');
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function readText(element) {
+            if (speechEnabled) {
+                const utterance = new SpeechSynthesisUtterance(element.innerText);
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // High-contrast mode toggle
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        // Add event listeners for text-to-speech on all pages
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.text-to-speak').forEach(element => {
+                element.addEventListener('click', () => readText(element));
+            });
+        });
+    </script>
+
+    <a href="{{ url_for('index') }}" class="button">Back to home</a>
+    
+    <iframe 
+        class="calendar-iframe" 
+        src="https://calendar.google.com/calendar/embed?src=4ab0bebcd432574da1f0f87c41b4d719c4a95d113b71463c85836f55f7eb3919%40group.calendar.google.com&ctz=Asia%2FKolkata" 
+        scrolling="no">
+    </iframe>
+
+</body>
+</html>

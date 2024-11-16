@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Course - HabitQuest</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f1ea; /* Light pink background */
+            color: #333;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background-color: #36a03e; /* Green background */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .logo-image {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Dashboard container */
+        .dashboard-container {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50; /* Green button */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded button */
+            padding: 10px 15px; /* Inner padding */
+            cursor: pointer; /* Pointer on hover */
+            font-size: 14px; /* Button font size */
+            transition: background-color 0.3s; /* Animation */
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <h1>Add New Course</h1>
+
+        <form action="{{ url_for('add_course') }}" method="post">
+            <div class="form-group">
+                <label for="habit_name">Course Name</label>
+                <input type="text" id="habit_name" name="habit_name" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Course Description</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="frequency">Frequency</label>
+                <select id="frequency" name="frequency" required>
+                    <option value="Daily">Daily</option>
+                    <option value="Weekly">Weekly</option>
+                </select>
+            </div>
+            <button type="submit">Add Course</button>
+        </form>
+    </div>
+</body>
+</html>

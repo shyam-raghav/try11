@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback and Contact Us</title>
+
+<style>
+    .parental-monitoring {
+      background-color: #eae9d8;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: Inter, sans-serif;
+      padding: 50px 41px 133px;
+    }
+    
+    .logo-container {
+      align-self: flex-start;
+      display: flex;
+      gap: 8px;
+      font-size: 18px;
+      color: #000;
+    }
+    
+    .logo {
+      aspect-ratio: 1.05;
+      object-fit: contain;
+      object-position: center;
+      width: 60px;
+    }
+    
+    .app-name {
+      margin: auto 0;
+    }
+    
+    .monitoring-content {
+      border-radius: 12px;
+      background-color: #f9f9f9;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      align-self: center;
+      display: flex;
+      margin-top: 26px;
+      width: 100%;
+      max-width: 1264px;
+      flex-direction: column;
+      padding: 60px 40px 56px;
+    }
+    
+    .section-title {
+      width: 100%;
+      padding-bottom: 1px;
+      color: #000;
+      font: 700 24px Poppins, sans-serif;
+    }
+    
+    .progress-card {
+      border-radius: 8px;
+      background-color: #f0e3e3;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      margin-top: 30px;
+      width: 100%;
+      flex-direction: column;
+      font-size: 12px;
+      color: #555;
+      padding: 39px 20px 34px;
+    }
+    
+    .card-title {
+      width: 100%;
+      padding-bottom: 1px;
+      font-size: 16px;
+      color: #333;
+      font-weight: 700;
+    }
+    
+    .progress-item {
+      margin-top: 14px;
+      width: 100%;
+      padding-bottom: 1px;
+    }
+    
+    .activity-card {
+      border-radius: 8px;
+      background-color: #f0e3e3;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      margin-top: 30px;
+      width: 100%;
+      flex-direction: column;
+      padding: 29px 20px 26px;
+    }
+    
+    .activity-list {
+      display: flex;
+      margin-top: 16px;
+      width: 100%;
+      flex-direction: column;
+      font-size: 12px;
+      color: #555;
+    }
+    
+    .activity-item {
+      width: 100%;
+      padding-bottom: 1px;
+      margin-top: 10px;
+    }
+    
+    .activity-item:first-child {
+      margin-top: 0;
+    }
+    
+    .goals-overview {
+      display: flex;
+      margin-top: 30px;
+      width: 100%;
+      flex-direction: column;
+      color: #000;
+    }
+    
+    .goals-title {
+      width: 100%;
+      padding-bottom: 1px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    
+    .goals-list {
+      display: flex;
+      margin-top: 19px;
+      width: 100%;
+      padding-left: 40px;
+      flex-direction: column;
+      font-size: 14px;
+    }
+    
+    .goal-item {
+      margin-bottom: 10px;
+    }
+    
+    .goal-status {
+      font-weight: 700;
+    }
+    
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
+    @media (max-width: 991px) {
+      .parental-monitoring {
+        padding: 0 20px 100px;
+      }
+    
+      .logo-container {
+        white-space: initial;
+      }
+    
+      .monitoring-content {
+        max-width: 100%;
+        padding: 0 20px;
+      }
+    
+      .section-title,
+      .progress-card,
+      .card-title,
+      .progress-item,
+      .activity-card,
+      .activity-list,
+      .activity-item,
+      .goals-overview,
+      .goals-title,
+      .goals-list {
+        max-width: 100%;
+      }
+    
+      .goals-list {
+        padding-left: 20px;
+      }
+    }
+
+    
+    .button {
+        background-color: #1B5E20; /* Green background */
+        color: white; /* White text */
+        padding: 10px 20px; /* Padding */
+        text-align: center; /* Center text */
+        text-decoration: none; /* No underline */
+        display: inline-block; /* Display as inline-block */
+        font-size: 16px; /* Font size */
+        margin: 4px 2px; /* Margin */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        width: 100px;
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s; /* Smooth background color transition */
+    }
+
+    .button:hover {
+        background-color: #1B5E20; /* Darker green on hover */
+    }
+
+    </style>
+</head>
+<body>
+  <section class="parental-monitoring">
+      <header class="logo-container">
+          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" alt="HabitQuest Logo" class="logo" />
+          <h1 class="app-name">HabitQuest</h1>
+      </header>
+      <br>
+      <div class="button-container">
+          <a href="{{ url_for('logout') }}" class="button">Logout</a>
+          <a href="{{ url_for('add_course_content') }}" class="button">Add Course Content</a>
+          <a href="{{ url_for('add_assessment') }}" class="button">Add Assessment</a>
+          <a href="{{ url_for('show_courses', parent_id=parent_id) }}" class="button">Edit Courses</a>
+          <a href="{{ url_for('feedback') }}" class="button">Feedback & Contact us</a>
+
+      </div>
+      
+      <main class="monitoring-content">
+        <h2 class="section-title">Parental Monitoring</h2>
+        <h3>Children </h3>
+        <ul>
+          {% for user in users %}
+              <li>{{ user['name'] }}</li>
+          {% endfor %}
+      </ul>
+    
+        {% for user_data in all_user_tasks %}
+            <section class="progress-card">
+                <h3 class="card-title">{{ user_data.user['name'] }}'s Progress</h3>
+                <p class="progress-item">Total Tasks: {{ user_data.tasks | length }}</p>
+                <p class="progress-item">Completed Tasks: {{ user_data.tasks | selectattr('status', 'equalto', 'Completed') | list | length }} / {{ user_data.tasks | length }}</p>
+            </section>
+    
+            <section class="activity-card">
+                <h3 class="card-title">{{ user_data.user['name'] }}'s Recent Tasks</h3>
+                <ul class="activity-list">
+                    {% for task in user_data.tasks %}
+                        <li class="activity-item">
+                            {{ task.task_name }} - Status: {{ task.status }}
+                            {% if task.completion_date %}
+                                - Completed on: {{ task.completion_date }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endfor %}
+    
+        {% for user_data in all_user_goals %}
+            <section class="goals-overview">
+                <h3 class="goals-title">{{ user_data.user['name'] }}'s Goals Overview</h3>
+                <ul class="goals-list">
+                    {% for goal in user_data.goals %}
+                        <li class="goal-item">
+                            {{ goal.goal_description }} - Status: <span class="goal-status">{{ goal.status }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endfor %}
+    </main>
+    
+  </section>
+</body></html>

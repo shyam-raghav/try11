@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Assessment - HabitQuest</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .option-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #1B5E20;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #1B5E20;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add Assessment Question</h2>
+    <form action="{{ url_for('add_assessment') }}" method="POST">
+        <label for="course_id">Course ID</label>
+        <input type="text" id="course_id" name="course_id" required>
+
+        <label for="question">Question</label>
+        <input type="text" id="question" name="question" required>
+
+       <!-- Options with Labels -->
+       
+       <div class="option-group">
+           <label for="option_1">Option 1</label>
+           <input type="text" name="option_1" id="option_1" placeholder="Option 1" required title="Enter option 1">
+
+           <label for="option_2">Option 2</label>
+           <input type="text" name="option_2" id="option_2" placeholder="Option 2" required title="Enter option 2">
+
+           <label for="option_3">Option 3</label>
+           <input type="text" name="option_3" id="option_3" placeholder="Option 3" required title="Enter option 3">
+
+           <label for="option_4">Option 4</label>
+           <input type="text" name="option_4" id="option_4" placeholder="Option 4" required title="Enter option 4">
+       </div>
+
+       <!-- Correct Option with Label -->
+       <label for="correct_option">Correct Option (e.g., Option 1)</label>
+       <select id="correct_option" name="correct_option" required title="Select the correct option">
+           <option value="1">Option 1</option>
+           <option value="2">Option 2</option>
+           <option value="3">Option 3</option>
+           <option value="4">Option 4</option>
+       </select>
+
+
+        <button type="submit" class="button">Add Question</button>
+    </form>
+</div>
+
+</body>
+</html>

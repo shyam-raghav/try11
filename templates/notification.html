@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Added lang attribute for accessibility -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Notifications - HabitQuest</title> <!-- Added title for navigation -->
+  
+  <style>
+      .notifications-page {
+        background-color: #eae9d8;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: Inter, sans-serif;
+        padding: 69px 50px 341px;
+      }
+
+      @media (max-width: 991px) {
+        .notifications-page {
+          padding: 0 20px 100px;
+        }
+      }
+
+      .logo-container {
+        align-self: flex-start;
+        display: flex;
+        gap: 8px;
+        font-size: 18px;
+        color: #000;
+      }
+
+      @media (max-width: 991px) {
+        .logo-container {
+          flex-wrap: wrap;
+        }
+      }
+
+      .logo-image {
+        aspect-ratio: 1.05;
+        object-fit: contain;
+        object-position: center;
+        width: 60px;
+      }
+
+      .app-name {
+        margin: auto 0;
+      }
+
+      .notifications-container {
+        border-radius: 12px;
+        background-color: #fff;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        align-self: center;
+        display: flex;
+        margin-top: 79px;
+        width: 600px;
+        max-width: 100%;
+        flex-direction: column;
+        padding: 60px 40px;
+      }
+
+      @media (max-width: 991px) {
+        .notifications-container {
+          margin-top: 40px;
+          padding: 0 20px;
+        }
+      }
+
+      .notifications-title {
+        width: 100%;
+        padding-bottom: 1px;
+        color: #000;
+        font: 700 24px Poppins, sans-serif;
+      }
+
+      @media (max-width: 991px) {
+        .notifications-title {
+          max-width: 100%;
+        }
+      }
+
+      .notification-card {
+        border-radius: 8px;
+        background-color: #f0e3e3;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        margin-top: 30px;
+        width: 100%;
+        align-items: center;
+        gap: 40px 100px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 20px;
+      }
+
+      @media (max-width: 991px) {
+        .notification-card {
+          max-width: 100%;
+        }
+      }
+
+      .notification-content {
+        align-self: stretch;
+        display: flex;
+        min-width: 240px;
+        flex-direction: column;
+        font-size: 12px;
+        color: #555;
+        font-weight: 700;
+        justify-content: center;
+        margin: auto 0;
+        padding: 14px 0;
+      }
+
+      .notification-text {
+        padding-bottom: 1px;
+      }
+
+      .notification-time {
+        align-self: stretch;
+        padding-bottom: 1px;
+        font-size: 10px;
+        color: #aaa;
+        font-weight: 400;
+        margin: auto 0;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .button {
+          background-color: #1B5E20; /* Green background */
+          color: white; /* White text */
+          padding: 10px 20px; /* Padding */
+          text-align: center; /* Center text */
+          text-decoration: none; /* No underline */
+          display: inline-block; /* Display as inline-block */
+          font-size: 16px; /* Font size */
+          margin: 4px 2px; /* Margin */
+          border: none; /* No border */
+          border-radius: 5px; /* Rounded corners */
+          width: 100px;
+          cursor: pointer; /* Pointer cursor on hover */
+          transition: background-color 0.3s; /* Smooth background color transition */
+      }
+
+      .button:hover {
+          background-color: #1B5E20; /* Darker green on hover */
+      }
+
+      /* High-contrast mode */
+      .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+        }
+
+      /* Button styles */
+      button, select {
+          display: inline-block;
+          padding: 10px 15px;
+          font-size: 1em;
+          color: #fff;
+          background-color: #1B5E20; /* Bootstrap primary color */
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease, transform 0.2s ease;
+          margin: 5px 0;
+      }
+  
+      button:hover, button:focus {
+          background-color: #1B5E20; /* Darker shade on hover */
+          transform: translateY(-2px); /* Subtle lift effect */
+      }
+  
+      button:active {
+          transform: translateY(0); /* Return to original position */
+      }
+  </style>
+</head>
+
+<body>
+  <div class="accessibility-controls">
+      <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+      <button onclick="toggleContrast()">High Contrast</button>
+      <div id="google_translate_element"></div>
+  </div>
+
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+  
+  <script>
+      // Function to initialize Google Translate
+      function googleTranslateElementInit() {
+          new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+      }
+
+      // Text-to-speech functionality
+      let speechEnabled = false;
+
+      function toggleTextToSpeech() {
+          speechEnabled = !speechEnabled;
+          if (speechEnabled) {
+              alert('Text-to-Speech enabled. Click text to hear it.');
+          } else {
+              alert('Text-to-Speech disabled.');
+              window.speechSynthesis.cancel();
+          }
+      }
+
+      function readText(element) {
+          if (speechEnabled) {
+              const utterance = new SpeechSynthesisUtterance(element.innerText);
+              window.speechSynthesis.speak(utterance);
+          }
+      }
+
+      // High-contrast mode toggle
+      function toggleContrast() {
+          document.body.classList.toggle('high-contrast');
+      }
+
+      // Add event listeners for text-to-speech on all pages
+      document.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('.text-to-speak').forEach(element => {
+              element.addEventListener('click', () => readText(element));
+          });
+      });
+  </script>
+
+  <section class="notifications-page">
+    <header class="logo-container">
+      <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" class="logo-image" alt="HabitQuest logo" />
+      <h1 class="app-name">HabitQuest</h1>
+    </header>
+    <br>
+    <a href="{{ url_for('index') }}" class="button" aria-label="Back to home">Back to home</a> <!-- Added aria-label for button -->
+    <main class="notifications-container">
+      <h2 class="notifications-title">Notifications</h2>
+
+      {% if notifications %}
+          {% for notification in notifications %}
+              <article class="notification-card">
+                  <div class="notification-content">
+                      <p class="notification-text">
+                          <strong>{{ notification['goal_description'] }}</strong>
+                      </p>
+                  </div>
+                  <time class="notification-time" datetime="{{ notification['target_date'] }}">{{ notification['target_date']}}</time> <!-- Added datetime attribute -->
+              </article>
+          {% endfor %}
+      {% else %}
+          <p>No notifications to display.</p>
+      {% endif %}
+    </main>
+  </section>
+</body>
+</html>

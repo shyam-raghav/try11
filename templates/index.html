@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Welcome to HabitQuest</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #eae9d8; /* Updated background color */
+      
+    }
+
+    /* Container and page sections */
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 2;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #333;
+      margin-bottom: 20px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #555;
+      margin-bottom: 40px;
+      animation: fadeIn 2.5s ease-in-out;
+    }
+
+    .button {
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 30px;
+      background-color: #1B5E20; /* Even darker green for better contrast */
+      color: white; /* White text for high contrast */
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      animation: fadeInUp 3s ease;
+      z-index: 3;
+      position: relative;
+      margin: 10px; /* Added margin for spacing */
+    }
+
+    .button:hover {
+      background-color: #174f17; /* Slightly darker green on hover */
+    }
+
+    /* Keyframe animations */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Background Animation */
+    .background-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4CAF50, #a5d6a7); /* Green gradient */
+      animation: scaleInOut 12s infinite ease-in-out;
+      opacity: 0.7;
+    }
+
+    .circle-1 {
+      width: 200px;
+      height: 200px;
+      top: 15%;
+      left: 5%;
+    }
+
+    .circle-2 {
+      width: 250px;
+      height: 250px;
+      bottom: 10%;
+      right: 10%;
+    }
+
+    .circle-3 {
+      width: 150px;
+      height: 150px;
+      bottom: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    @keyframes scaleInOut {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" alt="HabitQuest Logo" class="logo-image" style="width: 150px; margin-bottom: 20px;"> <!-- Added logo image -->
+    <h1>Welcome to HabitQuest</h1>
+  </header>
+
+  <!-- Main Section -->
+  <main class="container">
+    <p>Transform your habits, one quest at a time. Are you ready to start your journey?</p>
+    <a href="{{url_for('signup')}}" class="button">New User? Register Here</a>
+    <a href="{{url_for('login')}}" class="button">Existing User? Login Here</a> <!-- Added login button -->
+  </main>
+
+  <!-- Footer Section (Optional, can be added later) -->
+  <footer>
+    <!-- You can add footer content here if necessary -->
+  </footer>
+
+  <!-- Background Animations -->
+  <div class="background-circle circle-1"></div>
+  <div class="background-circle circle-2"></div>
+  <div class="background-circle circle-3"></div>
+</body>
+</html>

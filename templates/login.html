@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Added lang attribute for language specification -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - HabitQuest</title> <!-- Added a title for the page -->
+
+  <style>
+    .signup-page {
+      background-color: #eae9d8;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font: 400 18px/1.5 Inter, sans-serif;
+      color: #000;
+      padding: 20px;
+      height: 100vh;
+      justify-content: center;
+    }
+
+    .logo-container {
+      align-self: left;
+      display: flex;
+      gap: 8px;
+    }
+
+    .logo-image {
+      aspect-ratio: 1.05;
+      object-fit: contain;
+      width: 50px;
+    }
+
+    .signup-form {
+      border-radius: 12px;
+      background-color: #f8f9fa;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      align-self: center;
+      display: flex;
+      margin: 20px 0;
+      width: 90%;
+      max-width: 460px;
+      flex-direction: column;
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    .signup-title {
+      text-align: center;
+      font: 700 24px Poppins, sans-serif;
+      margin-bottom: 10px;
+    }
+
+    .social-buttons {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      font-size: 15px;
+      color: #f0e3e3;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .btn {
+      border-radius: 8px;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      color: #f0e3e3;
+    }
+
+    .btn-google {
+      background-color: rgba(219, 68, 55, 1);
+    }
+
+    .btn-facebook {
+      background-color: rgba(66, 103, 178, 1);
+    }
+
+    .input-field {
+    border-radius: 8px;
+    background-color: #f0e3e3;
+    font-size: 13px;
+    color: #333; /* Changed from #757575 to #333 for better contrast */
+    padding: 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+
+    .btn-signup {
+      background-color: #1B5E20;
+      margin-top: 10px;
+      color: rgba(240, 227, 227, 1);
+    }
+
+    .forgot-password {
+    margin-top: 9px;
+    font-size: 12px;
+    color: #333; /* Darkened color for better contrast */
+    text-align: center;
+    padding: 0 150px 1px;
+    text-decoration: none; /* Optional, removes underline */
+  }
+
+  /* Optional: Add a hover effect to enhance visibility */
+  .forgot-password:hover {
+    color: #000; /* Darken the color on hover */
+  }
+    .checkbox-input {
+      width: 13px;
+      height: 13px;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 991px) {
+      .signup-page {
+        padding: 10px;
+      }
+
+      .signup-form {
+        padding: 20px;
+      }
+
+      .signup-title {
+        padding: 0;
+      }
+
+      .btn {
+        padding: 10px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<section class="signup-page">
+  <header class="logo-container">
+    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" alt="HabitQuest Logo" class="logo-image">
+    <h1>HabitQuest</h1>
+  </header>
+
+  <main class="signup-form">
+    <h2 class="signup-title">Login</h2>
+    <br>
+    <form method="POST" action="{{ url_for('login') }}">
+
+      <!-- Added labels that are properly associated with the inputs for better screen reader accessibility -->
+      <label for="email">Email</label>
+      <input type="email" id="email" class="input-field" name="email" placeholder="Email" required aria-labelledby="email">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" class="input-field" name="password" placeholder="Password" required aria-labelledby="password">
+
+      <button type="submit" class="btn btn-signup">Login</button>
+      <a href="{{url_for('forgot_password')}}" class="forgot-password">Forgot password?</a>
+      <a href="{{url_for('signup')}}" class="forgot-password">New User, signup</a>
+    </form>
+  </main>
+</section>
+
+</body>
+</html>

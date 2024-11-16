@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eae9d8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1B5E20;
+            text-align: center;
+        }
+
+        .rewards-section {
+            margin-bottom: 30px;
+        }
+
+        .reward-item {
+            border-bottom: 1px solid #ccc;
+            padding: 15px 0;
+        }
+
+        .reward-item:last-child {
+            border-bottom: none;
+        }
+
+        .reward-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .reward-description {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .badge {
+            width: 40px; /* Adjust the size as needed */
+            height: auto; /* Maintain aspect ratio */
+            vertical-align: middle; /* Align badge with text */
+            margin-right: 10px; /* Space between badge and text */
+        }
+
+        .redeem-button {
+            background-color: #1B5E20;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .redeem-button:hover {
+            background-color: #1B5E20;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #1B5E20;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #1B5E20;
+        }
+
+        .points-section {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .points-section span {
+            font-weight: bold;
+            color: #1B5E20;
+        }
+ /* High-contrast mode */
+ .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+        }
+
+    /* Button styles */
+    button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Accessibility buttons -->
+    <div class="accessibility-controls">
+        <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+        <button onclick="toggleContrast()">High Contrast</button>
+        <div id="google_translate_element"></div>
+    </div>
+
+    <!-- External scripts -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    
+    <script>
+        // Function to initialize Google Translate
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+
+        // Text-to-speech functionality
+        let speechEnabled = false;
+
+        function toggleTextToSpeech() {
+            speechEnabled = !speechEnabled;
+            if (speechEnabled) {
+                alert('Text-to-Speech enabled. Click text to hear it.');
+            } else {
+                alert('Text-to-Speech disabled.');
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function readText(element) {
+            if (speechEnabled) {
+                const utterance = new SpeechSynthesisUtterance(element.innerText);
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // High-contrast mode toggle
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        // Add event listeners for text-to-speech on all pages
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.text-to-speak').forEach(element => {
+                element.addEventListener('click', () => readText(element));
+            });
+        });
+    </script>
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="back-button">Back to home</a>
+        <h1>Your Rewards</h1>
+
+        <div class="points-section">
+            <p>You have <span>{{ total_points }}</span> available to redeem!</p>
+        </div>
+
+        <div class="rewards-section">
+            {% for reward in rewards %}
+                <div class="reward-item">
+                    <img src="{{ reward_images.get(reward[1], 'https://via.placeholder.com/40/000000/FFFFFF?text=U') }}" 
+                    alt="Badge Image" class="badge">
+                    <div class="reward-title">{{ reward[0] }}</div>
+                    <div class="reward-description">Reward earned: {{ reward[1] }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ content['title'] }} Content</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+            background-color: #f4f4f9;
+        }
+    
+        h1 {
+            font-size: 2em;
+            color: #333;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+    
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #555;
+        }
+    
+        /* Styling for the document iframe */
+        .document-frame {
+            width: 100%;
+            height: 800px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+    
+        /* Button styles */
+        button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+    
+        /* Container for layout */
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        /* High-contrast mode styles */
+        body.high-contrast {
+            background-color: #000;
+            color: #FFF;
+        }
+    
+        .high-contrast button {
+            background-color: #FFF;
+            color: #000;
+        }
+    
+        .high-contrast button:hover, .high-contrast button:focus {
+            background-color: #ccc; /* Lighter shade on hover in high contrast mode */
+        }
+    
+        /* Styles for the select dropdown */
+        select {
+            background-color: #f4f4f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            color: #333;
+            padding: 10px;
+            margin-right: 10px;
+        }
+    
+        select:hover {
+            border-color: #1B5E20; /* Change border color on hover */
+        }
+
+                /* Button style for the assessment link */
+                a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            background-color: #1B5E20;
+        }
+           /* Button styles */
+    button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+    </style>
+    
+</head>
+<body>
+    <a href="{{ url_for('index') }}" class="button">Back to home</a>
+    <div class="content-container">
+        <!-- Accessibility buttons -->
+        <div class="accessibility-controls">
+            <button onclick="toggleTextToSpeech()">Text-to-Speech</button>
+            <button onclick="toggleContrast()">High Contrast</button>
+            <div id="google_translate_element"></div>
+
+            <script type="text/javascript">
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+            }
+            </script>
+        </div>
+
+        {% if content %}
+            <h1>{{ content['title'] }} Content</h1>
+            <p>{{ content['description'] }}</p>
+            <p class="text-to-speak">{{content['content_learning']}}</p>
+                    <!-- Video Player -->
+            <!-- Check if the content_url is a YouTube link and embed it -->
+            {% if 'youtube.com' in content['content_url'] %}
+                <iframe width="600" height="400" 
+                        src="https://www.youtube.com/embed/{{ content['content_url'].split('v=')[1] }}" 
+                        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                        title="Video tutorial on setting goals in HabitQuest"
+                        aria-label="Video tutorial on setting goals in HabitQuest"
+                        allowfullscreen>
+                </iframe>
+            {% else %}
+                <!-- Fallback for non-YouTube videos -->
+                <video width="600" controls>
+                    <source src="{{ content['content_url'] }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% endif %}
+
+ <br>
+
+            <a href="{{ url_for('assessment', content_id=content['content_id']) }}">Take Assessment</a>
+        {% else %}
+            <p>Content not found.</p>
+        {% endif %}
+    </div>
+
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script>
+        // Global variable to store the speech synthesis instance
+        let speechEnabled = false;
+
+        // Function to toggle text-to-speech
+        function toggleTextToSpeech() {
+            speechEnabled = !speechEnabled; // Toggle the speech flag
+            if (speechEnabled) {
+                alert('Text-to-Speech enabled. Click the button to hear the content.');
+            } else {
+                alert('Text-to-Speech disabled.');
+                // Stop any ongoing speech when disabling
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function readText(element) {
+            if (speechEnabled) {
+                const utterance = new SpeechSynthesisUtterance(element.innerText);
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        
+        // Function to toggle high-contrast mode
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        
+        // Add click event listener to paragraphs for text-to-speech
+        document.querySelectorAll('.text-to-speak').forEach(element => {
+            element.addEventListener('click', function() {
+                readText(this);
+            });
+        });
+    </script>
+</body>
+</html>

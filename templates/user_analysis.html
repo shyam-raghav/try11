@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Analytics - HabitQuest</title>
+    <style>
+        /* Updated styles with improved contrast and accessibility fixes */
+        .user-analytics {
+            background-color: #f7f7f7; /* Updated background for contrast */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 43px 80px 118px 37px;
+        }
+        .logo-container {
+            align-self: flex-start;
+            display: flex;
+            gap: 8px;
+            color: #000;
+            font: 400 18px Inter, sans-serif;
+        }
+        .logo-image {
+            aspect-ratio: 1.05;
+            object-fit: contain;
+            object-position: center;
+            width: 60px;
+        }
+        .logo-text {
+            margin: auto 0;
+            color: #333; /* Darker color for better contrast */
+        }
+        .analytics-title {
+            width: 100%;
+            padding-bottom: 1px;
+            color: #333; /* Darker color for better contrast */
+            font: 700 24px Poppins, sans-serif;
+        }
+        .analytics-card {
+            border-radius: 8px;
+            background-color: #f0e3e3;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            margin-top: 30px;
+            width: 100%;
+            flex-direction: column;
+            padding: 39px 20px 20px;
+        }
+        .card-title {
+            width: 100%;
+            color: #333; /* Ensuring contrast */
+            text-align: center;
+            font: 700 16px Inter, sans-serif;
+        }
+        .card-value {
+            margin-top: 24px;
+            width: 100%;
+            color: #1B5E20; /* Contrast with background */
+            text-align: center;
+            font: 400 22px Inter, sans-serif;
+        }
+        .progress-bar {
+            border-radius: 4px;
+            background-color: #e9ecef;
+            display: flex;
+            margin-top: 24px;
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .progress-fill {
+            border-radius: 4px;
+            background-color: #1B5E20;
+            height: 8px;
+        }
+        
+    .button {
+        background-color: #1B5E20; /* Green background */
+        color: white; /* White text */
+        padding: 10px 20px; /* Padding */
+        text-align: center; /* Center text */
+        text-decoration: none; /* No underline */
+        display: inline-block; /* Display as inline-block */
+        font-size: 16px; /* Font size */
+        margin: 4px 2px; /* Margin */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        width: 100px;
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s; /* Smooth background color transition */
+    }
+
+    .button:hover {
+        background-color: #1B5E20; /* Darker green on hover */
+    }
+
+     /* High-contrast mode */
+     .high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+            background-color: black;
+        }
+
+    /* Button styles */
+    button, select {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #1B5E20; /* Bootstrap primary color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 5px 0;
+        }
+    
+        button:hover, button:focus {
+            background-color: #1B5E20; /* Darker shade on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+    
+        button:active {
+            transform: translateY(0); /* Return to original position */
+        }
+
+        button:focus, select:focus {
+            outline: 3px solid #0056b3; /* Visible focus outline */
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility buttons -->
+    <div class="accessibility-controls">
+        <button onclick="toggleTextToSpeech()" aria-label="Enable or disable text-to-speech">Text-to-Speech</button>
+        <button onclick="toggleContrast()" aria-label="Toggle high contrast mode">High Contrast</button>
+        <div id="google_translate_element" aria-label="Translate this page"></div>
+    </div>
+    
+    <!-- User Analytics Page -->
+    <section class="user-analytics">
+        <header class="logo-container">
+            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb1830b5454e0074642c040444e16c8b4efe38cc3a5289983eba32e185b3736b?placeholderIfAbsent=true&apiKey=aa3f52c3f2244f6ca05b5f4f61461c10" alt="HabitQuest Logo" class="logo-image" />
+            <h1 class="logo-text">HabitQuest</h1>
+        </header>
+        <br>
+        <a href="{{ url_for('index') }}" class="button">Back to home</a>
+        <main class="analytics-container">
+            <h2 class="analytics-title">User Analytics</h2>
+            
+            <article class="analytics-card">
+                <h3 class="card-title">Tasks Completed</h3>
+                <p class="progress-item">Total Tasks: {{ total_tasks }}</p>
+                <p class="progress-item">Completed Tasks: {{ completed_tasks }}</p>
+                <p class="card-value">{{ tasks_completed_percentage }}%</p>
+                <div class="progress-bar" 
+                     role="progressbar" 
+                     aria-valuenow="{{ tasks_completed_percentage }}" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100" 
+                     aria-label="Task completion progress">
+                    <div class="progress-fill" style="width: '{{ tasks_completed_percentage }}%'"></div>
+                </div>
+            </article>
+            
+            <article class="analytics-card">
+                <h3 class="card-title">Habit Streak</h3>
+                <p class="card-value">{{ habit_streak }} days</p>
+            </article>
+            
+            <article class="analytics-card">
+                <h3 class="card-title">Average Task Time</h3>
+                <p class="card-value">{{ average_task_time }} mins</p>
+            </article>
+        </main>
+    </section>
+    
+    <!-- External Scripts -->
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+        // Function to initialize Google Translate
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+
+        // Text-to-speech functionality
+        let speechEnabled = false;
+
+        function toggleTextToSpeech() {
+            speechEnabled = !speechEnabled;
+            if (speechEnabled) {
+                alert('Text-to-Speech enabled. Click text to hear it.');
+            } else {
+                alert('Text-to-Speech disabled.');
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function readText(element) {
+            if (speechEnabled) {
+                const utterance = new SpeechSynthesisUtterance(element.innerText);
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // High-contrast mode toggle
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+
+        // Add event listeners for text-to-speech on all pages
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.text-to-speak').forEach(element => {
+                element.addEventListener('click', () => readText(element));
+            });
+        });
+    </script>
+</body>
+</html>

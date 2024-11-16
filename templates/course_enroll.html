@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Course Enrolled</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #eae9d8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 50px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #1B5E20;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .course-details {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 40px;
+    }
+
+    .course-details h3 {
+      color: #333;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .course-details p {
+      font-size: 1em;
+      color: #555;
+    }
+
+    .button {
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 30px;
+      background-color: #1B5E20;
+      color: white;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+    }
+
+    .button:hover {
+      background-color: #1B5E20;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Enrollment Successful!</h1>
+    <p>Congratulations! You have successfully enrolled in the course.</p>
+
+    <div class="course-details">
+      <h3>Course: {{course_name}}</h3>
+      <p>Start Date: {{ start_date }}</p>
+    </div>
+
+    <a href="{{url_for('content_delivery', content_id=content_id)}}" class="button">Go to content</a>
+  </div>
+</body>
+</html>

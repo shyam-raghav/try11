@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Course Content - HabitQuest</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #1B5E20;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #1B5E20;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add Course Content</h2>
+        <form method="POST" action="{{ url_for('add_course_content') }}">
+            <label for="course_id" id="course_id_label">Course ID:</label>
+            <input type="number" name="course_id" id="course_id" required="" aria-labelledby="course_id_label" title="Enter the unique course identifier">
+            
+            <label for="title" id="title_label">Title:</label>
+            <input type="text" name="title" id="title" required placeholder="Enter course title" aria-labelledby="title_label" title="Enter the title of the course">
+            
+            <label for="description" id="description_label">Description:</label>
+            <textarea name="description" id="description" placeholder="Enter the course description" aria-labelledby="description_label" title="Provide a brief description of the course"></textarea>
+            
+            <label for="content_learning" id="content_learning_label">Course Content:</label>
+            <textarea name="content_learning" id="content_learning" required placeholder="Describe the course content" aria-labelledby="content_learning_label" title="Provide detailed content for the course" ></textarea>
+            
+            <label for="content_type" id="content_type_label">Content Type:</label>
+            <select name="content_type" id="content_type" required aria-labelledby="content_type_label" title="Select the type of content for the course">
+                <option value="Video">Video</option>
+                <option value="PDF">PDF/DOC</option>
+            </select>
+            
+            <label for="content_url" id="content_url_label">Content URL:</label>
+            <input type="url" name="content_url" id="content_url" placeholder="Provide the content URL (optional)" aria-labelledby="content_url_label" title="Provide the URL for the course content">
+            
+            <label for="frequency" id="frequency_label">Frequency:</label>
+            <select name="frequency" id="frequency" aria-labelledby="frequency_label" title="Select the frequency of the course content delivery">
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+            </select>
+            
+            <label for="start_date" id="start_date_label">Start Date:</label>
+            <input type="date" name="start_date" id="start_date" required aria-labelledby="start_date_label" title="Select the start date of the course">
+            
+            <label for="end_date" id="end_date_label">End Date:</label>
+            <input type="date" name="end_date" id="end_date" aria-labelledby="end_date_label" title="Select the end date of the course">
+            
+            <label for="status" id="status_label">Status:</label>
+            <select name="status" id="status" required aria-labelledby="status_label" title="Select the status of the course">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+            
+            <button type="submit">Add Course Content</button>
+        </form>
+        <a href="{{ url_for('index') }}">Back to Home</a>
+    </div>
+</body>
+</html>
