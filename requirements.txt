@@ -3,7 +3,7 @@ Flask-Login
 Flask-WTF
 Flask-Mail
 Jinja2
-sqlite3
 Werkzeug
 itsdangerous
-smtplib
+flask-apscheduler
+gunicorn 
